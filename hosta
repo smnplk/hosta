@@ -91,7 +91,7 @@ case $1 in
         ;;
     foff)
         backup_hosts_file
-        ./$0 block  "${KNOWN_DISTRACTORS[@]}"
+        hosta block  "${KNOWN_DISTRACTORS[@]}"
         ;;
     show)
  	cat /etc/hosts
