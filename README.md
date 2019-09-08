@@ -19,9 +19,9 @@ Here we block facebook and youtube. You can add one or many domain arguments.
 sudo hosta block www.facebook.com www.youtube.com
 ```
 
-The above will first backup your /etc/hosts file and then add the following entry:
-127.0.0.1 www.facebook.com
-127.0.0.1 www.youtube.com
+The above will first backup your /etc/hosts file and then add the following entry:  
+127.0.0.1 www.facebook.com  
+127.0.0.1 www.youtube.com  
 
 ### Restoring your hosts file
 
