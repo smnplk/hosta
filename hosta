@@ -1,12 +1,15 @@
 #!/usr/bin/bash
 
+source youtube_domains
+
 HOSTS=/etc/hosts
 HOSTS_BCKP=/etc/hosts.bckp
 
 ARGS=($@)
 NUM_ARGS=($#)
 
-KNOWN_DISTRACTORS=( www.youtube.com www.facebook.com news.ycombinator.com www.reddit.com www.lobste.rs)
+MY_DISTRACTORS=( www.facebook.com news.ycombinator.com www.reddit.com www.lobste.rs )
+DISTRACTORS=( "${YT_DOMAINS[@]}" "${MY_DISTRACTORS[@]}" )
 
 read -r -d '' USAGE_TXT <<- EOF
 Usage:
@@ -91,7 +94,7 @@ case $1 in
         ;;
     foff)
         backup_hosts_file
-        hosta block  "${KNOWN_DISTRACTORS[@]}"
+        hosta block  "${DISTRACTORS[@]}"
         ;;
     show)
  	cat /etc/hosts

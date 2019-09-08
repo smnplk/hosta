@@ -4,24 +4,26 @@ A little utility bash script for quickly blocking sites from your browser, i.e p
 
 ## Usage
 
-Move hosta file somewhere on your PATH and make it executable.
-I usually have my custom scripts in my ~/Scripts folder
+Clone this repo and move the folder somewhere on your PATH. 
+I usually have my custom scripts in my ~/Scripts folder. 
+Also make sure to make **hosta** file executable. 
 
 ```bash
-mv hosta ~/Scripts && cd ~/Script && chmod +x hosta
+git clone https://github.com/smnplk/hosta
+mv hosta ~/Scripts && cd ~/Scripts/hosta && chmod +x hosta
 ```
 
 ### Blocking sites
 
-Here we block facebook and youtube. You can add one or many domain arguments.  
+Here we block facebook and nytimes. You can add one or many host arguments. 
 
 ```bash
-sudo hosta block www.facebook.com www.youtube.com
+sudo hosta block www.facebook.com www.nytimes.com
 ```
 
-The above will first backup your /etc/hosts file and then add the following entry:  
+The above will first backup your /etc/hosts file and then add the following entries.  
 127.0.0.1 www.facebook.com  
-127.0.0.1 www.youtube.com  
+127.0.0.1 www.nytimes.com
 
 ### Restoring your hosts file
 
