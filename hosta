@@ -1,0 +1,102 @@
+#!/usr/bin/bash
+
+HOSTS=/etc/hosts
+HOSTS_BCKP=/etc/hosts.bckp
+
+ARGS=($@)
+NUM_ARGS=($#)
+
+KNOWN_DISTRACTORS=( www.youtube.com www.facebook.com news.ycombinator.com www.reddit.com www.lobste.rs)
+
+read -r -d '' USAGE_TXT <<- EOF
+Usage:
+
+To block sites:
+
+   hosta block [<www.siteiwannablock.com>, ... ]
+
+To block known distractors (facebook, youtube, reddit, hackrnews, lobste.rs), there is a shortcut:
+
+   hosta foff
+
+To restore your hosts file:
+
+   hosta clean
+
+To show your hosts file:
+
+   hosta show
+EOF
+
+
+function check_arg_is_provided () {
+    if [ $NUM_ARGS -lt 2 ]; then
+        echo  "Command " ${ARGS[0]} " expects an argument" >&2
+        exit 1
+    fi
+}
+
+
+function check_sudo () {
+    if [ "$(id -u)" != "0" ]; then
+        echo "You need to run it with sudo" >&2
+        exit 1
+    fi
+}
+
+
+function add_site_to_hosts () {
+  check_arg_is_provided
+
+  for arg in ${ARGS[@]:1}
+  do
+      echo  "127.0.0.1  $arg" >> $HOSTS
+  done
+  echo  $(($NUM_ARGS - 1)) "site(s) blocked"
+}
+
+
+function hosts_bckp_exists? () {
+    test -f $HOSTS_BCKP
+}
+
+
+function backup_hosts_file () {
+    if ! hosts_bckp_exists? ; then
+        sudo cp /etc/hosts $HOSTS_BCKP
+    fi
+}
+
+
+function clean () {
+    if  hosts_bckp_exists? ; then
+        rm /etc/hosts && mv /etc/hosts.bckp /etc/hosts
+        echo "Hosts file restored"
+    else
+        echo "/etc/hosts.bckp file doesn't exist, nothing to clean" >&2
+    fi
+}
+
+
+check_sudo
+
+
+case $1 in
+    block)
+        backup_hosts_file
+        add_site_to_hosts $2
+        ;;
+    clean)
+        clean
+        ;;
+    foff)
+        backup_hosts_file
+        ./$0 block  "${KNOWN_DISTRACTORS[@]}"
+        ;;
+    show)
+ 	cat /etc/hosts
+	;;
+    *)
+        echo "$USAGE_TXT"
+        ;;
+esac
